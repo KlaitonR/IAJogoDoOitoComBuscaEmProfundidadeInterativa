@@ -1,14 +1,14 @@
 
 public class Tabuleiro {
 
-	private Peca tabuleiro [][] = new Peca [3][3];
+	String tabuleiro [][] = new String [3][3];
 
-	public Peca[][] getTabuleiro() {
+	public String[][] getTabuleiro() {
 		return tabuleiro;
 	}
 
-	public void setTabuleiro(Peca[][] tabuleiro) {
+	public void setTabuleiro(String[][] tabuleiro) {
 		this.tabuleiro = tabuleiro;
-	} 
+	}
 	
 }
