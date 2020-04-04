@@ -4,37 +4,40 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		Tabuleiro tbInicial = new Tabuleiro();
-		Tabuleiro tbFinal = new Tabuleiro();
-		Lista fronteiras = new Lista();
-		
+		String tbi[][] = new String [3][3];
+		String tbf[][] = new String [3][3];
 		
 		// Dados já inseridos para teste
-		tbInicial.tabuleiro[0][0] = "1";
-		tbInicial.tabuleiro[1][0] = "2";
-		tbInicial.tabuleiro[2][0] = "3";
-		tbInicial.tabuleiro[0][1] = "4";
-		tbInicial.tabuleiro[0][2] = "5";
-		tbInicial.tabuleiro[1][1] = "6";
-		tbInicial.tabuleiro[2][2] = "7";
-		tbInicial.tabuleiro[1][2] = "8";
-		tbInicial.tabuleiro[2][1] = " ";
+				tbi[0][0] = "1";
+				tbi[1][0] = "2";
+				tbi[2][0] = "3";
+				tbi[0][1] = "4";
+				tbi[0][2] = "5";
+				tbi[1][1] = " ";
+				tbi[2][2] = "7";
+				tbi[1][2] = "8";
+				tbi[2][1] = "6";
+				
+				tbf[0][0] = "4";
+				tbf[1][0] = "5";
+				tbf[2][0] = "3";
+				tbf[0][1] = "1";
+				tbf[0][2] = "2";
+				tbf[1][1] = "6";
+				tbf[2][2] = "7";
+				tbf[1][2] = "8";
+				tbf[2][1] = " ";
 		
-		tbFinal.tabuleiro[0][0] = "1";
-		tbFinal.tabuleiro[1][0] = "2";
-		tbFinal.tabuleiro[2][0] = "3";
-		tbFinal.tabuleiro[0][1] = "4";
-		tbFinal.tabuleiro[0][2] = "5";
-		tbFinal.tabuleiro[1][1] = "6";
-		tbFinal.tabuleiro[2][2] = "7";
-		tbFinal.tabuleiro[1][2] = "8";
-		tbFinal.tabuleiro[2][1] = " ";
+		Fronteira tbInicial = new Fronteira(tbi);
+		Fronteira tbFinal = new Fronteira(tbf);
 		
+		Lista fronteiras = new Lista();
+
 		/*
 		JOptionPane.showMessageDialog(null, "*** Preencha o Tabuleiro inicial ***");
-		preencheTabuleiros(tbInicial);
+		preencheTabuleiros(fi);
 		JOptionPane.showMessageDialog(null, "*** Preencha o Tabuleiro final ***");
-		preencheTabuleiros(tbFinal);
+		preencheTabuleiros(ff);
 		*/
 		int op = 0;
 		
@@ -44,36 +47,35 @@ public class Main {
 				
 				case 1: //Busca em profundidade interativa
 					
-					expandeFronteiras(tbInicial, fronteiras );
+					expandeFronteiras(tbInicial, fronteiras);
+	
+					//JOptionPane.showMessageDialog(null, fronteiras.primeiroDaLista());
 					
-					while(fronteiras.estaVazio() == false) { //enquanto a lista de fronteira estiver cheia
-						
-						Tabuleiro tbVerificacao = new Tabuleiro();
-						tbVerificacao = verificaResultado(tbFinal, fronteiras);
-						
-						if(tbVerificacao == null) { //significa que ainda não chegou no rsultado
+					boolean ver = verificaResultado(tbFinal, fronteiras);
+					
+					if(ver == false) { //significa que ainda não chegou no resultado
+					
+						while(fronteiras.estaVazio() == false) { //enquanto a lista de fronteira estiver cheia
 							
-							Tabuleiro t = new Tabuleiro();
-							t.tabuleiro =  fronteiras.primeiroDaLista().tb; // Pega a primeira fronteira da lista
-							expandeFronteiras(t, fronteiras); //expande essa fronteira em novas fronteiras
-							
+							expandeFronteiras(fronteiras.primeiroDaLista(), fronteiras); //expande essa fronteira em novas fronteiras
 							fronteiras.removeInicio(); //remove a fronteira já expandida
-							
-						}else { //Mostra o tabuleiro final
-							
-							String resultado = "-------------\n";
-							
-							for(int i = 0; i<=2; i++) {
-								resultado += "| ";
-								for(int j = 0; j<=2; j++) {
-									resultado+= tbVerificacao.tabuleiro[i][j] + " | ";
-								}
-								
-								resultado += "\n-------------\n";
-							}
-							
-							JOptionPane.showMessageDialog(null, "O puzzle foi reslvido" + resultado+ "\n" + tbFinal);
+					
 						}
+							
+					}else { //Mostra o tabuleiro final
+							
+						String resultado = "-------------\n";
+							
+						for(int i = 0; i<=2; i++) {
+							resultado += "| ";
+							for(int j = 0; j<=2; j++) {
+								resultado+= tbFinal.tb[i][j] + " | ";
+							}
+								
+							resultado += "\n-------------\n";
+						}
+							
+						JOptionPane.showMessageDialog(null, "O puzzle foi reslvido" + resultado+ "\n" + tbFinal);
 					}
 					
 					break;
@@ -92,10 +94,9 @@ public class Main {
 	
 		}while(op!=4);
 		
-		
 	}
 
-	public static int retornaMenu() { //menu
+	static public  int retornaMenu() { //menu
 		
 		String menu ="Qual o tipo de busca? \n"
 					+ "1 - Busca em profundidade interativa. \n"
@@ -107,7 +108,7 @@ public class Main {
 	
 	}
 	
-	public static void preencheTabuleiros(Tabuleiro tb) { //preenche os tabuleiros no estado inicial e final (resultado que se quer chegar)
+	static public void preencheTabuleiros(Fronteira f) { //preenche os tabuleiros no estado inicial e final (resultado que se quer chegar)
 		
 	int op=0;
 	String tab = "-------------\n";
@@ -122,13 +123,13 @@ public class Main {
 			
 				if(op==1) { // verifica se o jogador quer colocar um número ou um espaço vazio
 					peca = JOptionPane.showInputDialog("Digite o número."); 
-					tb.tabuleiro[i][j] = peca; //preenche as casas do tabuleiro com a peça
+					f.tb[i][j] = peca; //preenche as casas do tabuleiro com a peça
 					
 					tab+= peca + " | ";
 				}else {
-					if(verf ==false) {
+					if(verf == false) {
 						peca  = "  ";
-						tb.tabuleiro[i][j] = peca; //preenche a casa do tabuleiro com espaço vazio
+						f.tb[i][j] = peca; //preenche a casa do tabuleiro com espaço vazio
 						tab+= peca + " | ";
 						verf = true;
 					}else {
@@ -144,20 +145,25 @@ public class Main {
 		}
 	}
 	
-	public static void expandeFronteiras(Tabuleiro tb, Lista fronteiras) {
+	static public void expandeFronteiras(Fronteira f, Lista fronteiras) {
 		
-		int pI=0, pJ=0;
-		Fronteira novaFronteira = new Fronteira(tb.tabuleiro); //Cria nova fronteira
+		int pI=0; 
+		int pJ=0;
+		int excep=0;
+		//int c = 0;
 		
 		for(int i=0;i<=2;i++) {   // Laço para verificar a posição da peça vazia
 			for(int j=0;j<=2;j++) {
 				
-				if(tb.tabuleiro[i][j].equals(" ")) { // pega a posição da peça vazia
+				if(f.tb[i][j].equals(" ")) { // pega a posição da peça vazia
 					pI = i;
 					pJ = j;
+					//c = i;
 				}
 			}
 		}
+		
+		//JOptionPane.showMessageDialog(null, "Posição i: " + pI + "Posição j: " + pJ + " - "+ c);
 		
 				/* tb.tabuleiro[i][j] tem a posição da peça atual, ex (i,j) = (1,1)
 				 * se subtrairmos o contador i (i--), ficamos com (i--,j) = (0,1)
@@ -211,14 +217,25 @@ public class Main {
 				 * 
 				*/
 				
+			excep = pI - 1;
+			if(excep >= 0) { //Verifica se existe uma posição em cima
 				
-				if(pI-- > 0) { //Verifica se existe uma posição em cima 
+				String tb [][] =  new String [3][3];
+				
+				for(int i=0;i<=2;i++) {   // Laço para verificar a posição da peça vazia
+					for(int j=0;j<=2;j++) {
+						tb[i][j] = f.tb[i][j];
+						}
+				}
+				
+				Fronteira novaFronteira = new Fronteira(tb); //Cria nova fronteira
+				novaFronteira.tb[pI][pJ] = f.tb[excep][pJ]; //pega o valor do tabuleiro predecessor, e coloca na peça vazia
+				novaFronteira.tb[excep][pJ] = " "; //Troca o valor pela peça vazia, ou seja, move a peça vazia para cima e a com valor para baixo
+				
+				fronteiras.inserePrimeiro(novaFronteira);  //Adiciona a nova fronteira na lista de fronteiras
 					
-					novaFronteira.tb[pI][pJ] = tb.tabuleiro[pI--][pJ]; //pega o valor do tabuleiro predecessor, e coloca na peça vazia
-					novaFronteira.tb[pI--][pJ] = " "; //Troca o valor pela peça vazia, ou seja, move a peça vazia para cima e a com valor para baixo
-					
-					fronteiras.inserePrimeiro(novaFronteira.tb);  //Adiciona a nova fronteira na lista de fronteiras
-					
+				//mostraMovimento(novaFronteira,f);
+			}
 					/*    0  1  2  
 					 * 	 ----------
 					 * 0 |1 |7 |4 |   
@@ -226,9 +243,9 @@ public class Main {
 					 * 1 |5 |  |2 |     move a peça vazia para cima e a com valor para baixo 
 					 * 	 ----------
 					 * 2 |3 |8 |6 | 
-					 * 	 ----------
+					 * 	 ---------
 					 *
-					/*    0  1  2  
+					 *    0  1  2  
 					 * 	 ----------
 					 * 0 |1 |  |4 |   
 					 * 	 ----------     Peça movida foi a 7
@@ -237,53 +254,121 @@ public class Main {
 					 * 2 |3 |8 |6 | 
 					 * 	 ----------
 					*/
+				//pI++;
+				
+			excep = pJ - 1;
+			if(excep >= 0) { //Verifica se existe uma posição à Esquerda
+					
+				String tb [][] =  new String [3][3];
+				
+				for(int i=0;i<=2;i++) {   // Laço para verificar a posição da peça vazia
+					for(int j=0;j<=2;j++) {
+						tb[i][j] = f.tb[i][j];
+						}
 				}
+				
+				Fronteira novaFronteira = new Fronteira(tb); //Cria nova fronteira
+				novaFronteira.tb[pI][pJ] = f.tb[pI][excep]; 
+				novaFronteira.tb[pI][excep] = " ";
 					
-				 
-				if(pJ-- > 0) { //Verifica se existe uma posição à Esquerda
-						
-					novaFronteira.tb[pI][pJ] = tb.tabuleiro[pI][pJ--]; 
-					novaFronteira.tb[pI][pJ--] = " ";
+				fronteiras.inserePrimeiro(novaFronteira);  //Adiciona a nova fronteira na lista de fronteiras
 					
-					fronteiras.inserePrimeiro(novaFronteira.tb);  //Adiciona a nova fronteira na lista de fronteiras
-					
+				//mostraMovimento(novaFronteira,f);
+			}
+				
+			excep = pI + 1;
+			if(excep <= 2) {  //Verifica se existe uma posição para baixo
+				
+				
+				String tb [][] =  new String [3][3];
+				
+				for(int i=0;i<=2;i++) {   // Laço para verificar a posição da peça vazia
+					for(int j=0;j<=2;j++) {
+						tb[i][j] = f.tb[i][j];
+						}
 				}
-						
+				
+				Fronteira novaFronteira = new Fronteira(tb); //Cria nova fronteira
+				novaFronteira.tb[pI][pJ] = f.tb[excep][pJ]; 
+				novaFronteira.tb[excep][pJ] = " ";
 					
-				if(pI++ < 2) {  //Verifica se existe uma posição para baixo
-					
-					novaFronteira.tb[pI][pJ] = tb.tabuleiro[pI++][pJ]; 
-					novaFronteira.tb[pI++][pJ] = " ";
-					
-					fronteiras.inserePrimeiro(novaFronteira.tb);  //Adiciona a nova fronteira na lista de fronteiras
+				fronteiras.inserePrimeiro(novaFronteira);  //Adiciona a nova fronteira na lista de fronteiras
 							
+				//mostraMovimento(novaFronteira,f);
+					
+			}
+				
+			excep = pJ + 1;
+			if(excep <= 2) { //Verifica se existe uma posição à Direita
+				
+				String tb [][] =  new String [3][3];
+				
+				for(int i=0;i<=2;i++) {   // Laço para verificar a posição da peça vazia
+					for(int j=0;j<=2;j++) {
+						tb[i][j] = f.tb[i][j];
+						}
 				}
-							
-				if(pJ++ < 2) { //Verifica se existe uma posição à Direita
+				
+				Fronteira novaFronteira = new Fronteira(tb); //Cria nova fronteira
+				novaFronteira.tb[pI][pJ] = f.tb[pI][excep]; 
+				novaFronteira.tb[pI][excep] = " ";
 					
-					novaFronteira.tb[pI][pJ] = tb.tabuleiro[pI][pJ++]; 
-					novaFronteira.tb[pI][pJ++] = " ";
-					
-					fronteiras.inserePrimeiro(novaFronteira.tb);  //Adiciona a nova fronteira na lista de fronteiras
+				fronteiras.inserePrimeiro(novaFronteira);  //Adiciona a nova fronteira na lista de fronteiras
 								
-				}
-		
+				//mostraMovimento(novaFronteira,f);
+					
+			}
+				
+			//mostraLista(fronteiras);
 	}
 	
-	public static Tabuleiro verificaResultado(Tabuleiro tbFinal, Lista fronteiras) {
+	static public boolean verificaResultado(Fronteira ff, Lista fronteiras) {
+	
+		if(fronteiras.buscaFronteira(ff) > 0) {
+			return true;
 		
-		Tabuleiro resultado = new Tabuleiro();
-		int pos = fronteiras.buscaFronteira(tbFinal.tabuleiro);
-		
-		if(pos>0) {
-			
-			resultado.tabuleiro = fronteiras.atual.tb; 
-			
-			return resultado;
-			
 		}else {
-			return null;
+			return false;
 		}
+	}
+	
+	static public void mostraMovimento(Fronteira fNew, Fronteira fOld) {
+		
+		String tabuleiroOld = "-------------\n";
+		
+		for(int i = 0; i<=2; i++) {
+			tabuleiroOld += "| ";
+			for(int j = 0; j<=2; j++) {
+				tabuleiroOld += fNew.tb[i][j] + " | ";
+			}
+			
+			tabuleiroOld += "\n-------------\n";
+		}
+		
+		String tabuleiroNew = "-------------\n";
+		
+		for(int i = 0; i<=2; i++) {
+			tabuleiroNew += "| ";
+			for(int j = 0; j<=2; j++) {
+				tabuleiroNew += fNew.tb[i][j] + " | ";
+			}
+			
+			tabuleiroNew += "\n-------------\n";
+		}
+		
+		JOptionPane.showMessageDialog(null, tabuleiroOld);
+		JOptionPane.showMessageDialog(null, tabuleiroNew);
+	}
+	
+	static public void mostraLista(Lista fronteiras) {
+		
+		String lista = "Lista: \n";
+		
+		for(int i=0;i<fronteiras.comprimento();i++) {
+			lista += fronteiras.fronteiraNaPosicao(i) + "\n";
+		}
+		
+		JOptionPane.showMessageDialog(null, lista);
 	}
 	
 }
