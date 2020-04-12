@@ -13,6 +13,8 @@ public class Main {
 		String tbi[][] = new String [3][3];
 		String tbf[][] = new String [3][3];
 		
+		long init, end, diff;
+		
 		// Dados já inseridos para teste
 		tbi[0][0] = "1";
 		tbi[1][0] = "2";
@@ -69,6 +71,8 @@ public class Main {
 				
 				case 1: //Busca em profundidade interativa
 					
+					init = System.currentTimeMillis();
+					
 					int limiteDeProfundidade; //limite de profundidade da busca
 					boolean verificaLimite = true; //verificação para o limite da busca
 					
@@ -78,7 +82,7 @@ public class Main {
 					
 					limiteDeProfundidade = Integer.parseInt(JOptionPane.showInputDialog("Insira o limite de profundidade"));
 					
-					do{ // Enquanto não retornar o resultado correto ou o limite de profundidade não ser atingido
+					do { // Enquanto não retornar o resultado correto ou o limite de profundidade não ser atingido
 						
 						//Se o primeiro da lista não tiver em sua profundidade máxima e ainda não foi expandido
 						if(FronteiraAtual.get(0).profundidade < limiteDeProfundidade && FronteiraAtual.get(0).expansao == false)
@@ -92,14 +96,25 @@ public class Main {
 						//Verifica se já achou o resultado dentro das fronteiras atuais
 						fronteiraFinal = verificaFronteira(FronteiraAtual, tbFinal);
 						
-					}while(fronteiraFinal == null && verificaLimite == true);  // Enquanto não retornar o resultado correto ou o limite de profundidade não ser atingido
+					}while(fronteiraFinal == null && verificaLimite == true);
 
 					if( verificaLimite == false) { //Se o limite for atingido e ainda não encontrou o resultado
 						JOptionPane.showMessageDialog(null, "Resultado não encontrado até a profundidade " + limiteDeProfundidade);
 					}
 					
+					end = System.currentTimeMillis();
+					
+					diff = end - init;
+					
 					//MOSTRA RESULTADOS FINAIS
 					if(fronteiraFinal != null) {
+						
+//						for(int i=0; i< FronteiraAtual.size();i++) {
+//							
+//							if(FronteiraAtual.get(i).profundidade < fronteiraFinal.profundidade && FronteiraAtual.get(i).toString().equals(tbFinal.toString())) {
+//								fronteiraFinal = FronteiraAtual.get(i);
+//							}
+//						}
 						
 						String tabuleiroFinal = "-------------\n";
 						
@@ -125,7 +140,13 @@ public class Main {
 						}
 						
 						JOptionPane.showMessageDialog(null,"Tabuleiro Final : \n" + tabuleiroFinal + "\n Resultado Final : \n" + tabuleiro
-								+ "\n Foi encontrado na profundidade: " + fronteiraFinal.profundidade);
+								+ "\n Foi encontrado na profundidade: " + fronteiraFinal.profundidade
+								+ "\n "
+								+ ""
+								+ ""
+								+ ""
+								+ ""
+								+ "A Solução foi encontrada em: " + (diff / 1000) + " segundos");
 						
 						// MOSTRA MOVIMENTOS NO CONSOLE
 				
@@ -321,6 +342,8 @@ public class Main {
 						
 						fronteiras.add(0,novaFronteiraParaCima);  //Adiciona a nova fronteira na lista de fronteiras
 						//mostraMovimento(novaFronteiraParaCima);
+						
+						//JOptionPane.showMessageDialog(null, "prof nova: " + novaFronteiraParaCima.profundidade + "prof antiga: " + f.profundidade);
 					} 
 				}
 					
@@ -351,6 +374,8 @@ public class Main {
 						//f.fronteiras.add(novaFronteiraEsquerda);
 						fronteiras.add(0,novaFronteiraEsquerda);
 						//mostraMovimento(novaFronteiraEsquerda);
+						
+					//	JOptionPane.showMessageDialog(null, "prof nova: " + novaFronteiraEsquerda.profundidade + "prof antiga: " + f.profundidade);
 						
 					}
 						
@@ -385,6 +410,8 @@ public class Main {
 						fronteiras.add(0,novaFronteiraParaBaixo);  
 						//mostraMovimento(novaFronteiraParaBaixo);
 						
+					//	JOptionPane.showMessageDialog(null, "prof nova: " + novaFronteiraParaBaixo.profundidade + "prof antiga: " + f.profundidade);
+						
 					}	
 						
 				}
@@ -416,6 +443,8 @@ public class Main {
 						//f.fronteiras.add(novaFronteiraDireita);
 						fronteiras.add(0,novaFronteiraDireita);
 						//mostraMovimento(novaFronteiraDireita);
+						
+					//	JOptionPane.showMessageDialog(null, "prof nova: " + novaFronteiraDireita.profundidade + "prof antiga: " + f.profundidade);
 					}
 						
 				}
