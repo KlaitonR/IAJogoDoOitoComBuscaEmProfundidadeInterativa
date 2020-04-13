@@ -7,6 +7,7 @@ public class Main {
 		// TODO Auto-generated method stub
 		
 		ArrayList<Fronteira> FronteiraAtual = new ArrayList<>();
+		
 		Fronteira tbInicial = new Fronteira();
 		Fronteira tbFinal = new Fronteira();
 		
@@ -16,6 +17,27 @@ public class Main {
 		long init, end, diff;
 		
 		// Dados já inseridos para teste
+		
+//		tbi[0][0] = "1";
+//		tbi[1][0] = "8";
+//		tbi[2][0] = "7";
+//		tbi[0][1] = "2";
+//		tbi[0][2] = "3";
+//		tbi[1][1] = " ";
+//		tbi[2][2] = "5";
+//		tbi[1][2] = "4";
+//		tbi[2][1] = "6";
+		
+//		tbf[0][0] = " ";
+//		tbf[1][0] = "3";
+//		tbf[2][0] = "6";
+//		tbf[0][1] = "2";
+//		tbf[0][2] = "5";
+//		tbf[1][1] = "8";
+//		tbf[2][2] = "4";
+//		tbf[1][2] = "7";
+//		tbf[2][1] = "1";
+		
 		tbi[0][0] = "1";
 		tbi[1][0] = "2";
 		tbi[2][0] = "3";
@@ -26,15 +48,15 @@ public class Main {
 		tbi[1][2] = "8";
 		tbi[2][1] = "6";
 
-//		tbf[0][0] = "1";
-//		tbf[1][0] = " ";
-//		tbf[2][0] = "2";
-//		tbf[0][1] = "4";
-//		tbf[0][2] = "5";
-//		tbf[1][1] = "8";
-//		tbf[2][2] = "6";
-//		tbf[1][2] = "7";
-//		tbf[2][1] = "3";
+		tbf[0][0] = "1";
+		tbf[1][0] = " ";
+		tbf[2][0] = "2";
+		tbf[0][1] = "4";
+		tbf[0][2] = "5";
+		tbf[1][1] = "8";
+		tbf[2][2] = "6";
+		tbf[1][2] = "7";
+		tbf[2][1] = "3";
 		
 		/*tbf[0][0] = "1";
 		tbf[1][0] = " ";
@@ -46,18 +68,24 @@ public class Main {
 		tbf[1][2] = "7";
 		tbf[2][1] = "3";*/
 		
-		tbf[0][0] = "2";
-		tbf[1][0] = "3";
-		tbf[2][0] = "1";
-		tbf[0][1] = "7";
-		tbf[0][2] = "5";
-		tbf[1][1] = "4";
-		tbf[2][2] = "6";
-		tbf[1][2] = "8";
-		tbf[2][1] = " ";
+//		tbf[0][0] = "2";
+//		tbf[1][0] = "3";
+//		tbf[2][0] = "1";
+//		tbf[0][1] = "7";
+//		tbf[0][2] = "5";
+//		tbf[1][1] = "4";
+//		tbf[2][2] = "6";
+//		tbf[1][2] = "8";
+//		tbf[2][1] = " ";
 		
 		tbInicial.tabuleiro = tbi;
 		tbFinal.tabuleiro = tbf;
+		
+//		JOptionPane.showMessageDialog(null, "Preencha o tabuleiro inicial do jogo.");
+//		preencheTabuleiros(tbInicial);
+//		
+//		JOptionPane.showMessageDialog(null, "Preencha o tabuleiro final do jogo.");
+//		preencheTabuleiros(tbFinal);
 		
 		tbInicial.antecessor = tbInicial;
 		
@@ -74,31 +102,33 @@ public class Main {
 					init = System.currentTimeMillis();
 					
 					int limiteDeProfundidade; //limite de profundidade da busca
-					boolean verificaLimite = true; //verificação para o limite da busca
 					
-					Fronteira fronteiraFinal = new Fronteira(); //guardar o resultado final da busca
-					
-					fronteiraFinal = verificaFronteira(FronteiraAtual, tbFinal);
+					boolean verificaResultado = false;
 					
 					limiteDeProfundidade = Integer.parseInt(JOptionPane.showInputDialog("Insira o limite de profundidade"));
 					
-					do { // Enquanto não retornar o resultado correto ou o limite de profundidade não ser atingido
+						while(verificaResultado == false && FronteiraAtual.size() > 0){ // Enquanto não retornar o resultado correto ou o limite de profundidade não ser atingido
 						
-						//Se o primeiro da lista não tiver em sua profundidade máxima e ainda não foi expandido
-						if(FronteiraAtual.get(0).profundidade < limiteDeProfundidade && FronteiraAtual.get(0).expansao == false)
-							expandeFronteira(FronteiraAtual.get(0),FronteiraAtual); //expande a fronteira
-						else
-							FronteiraAtual.remove(0); //Se não, retira da lista, pois já foi expandido, ou seu limite de profundidade já foi atingido
+							//JOptionPane.showMessageDialog(null, limiteDeProfundidade);
 						
-						//Verifica se todos os nós foram expandidos ao seu limite
-						verificaLimite = limiteDeProfundidade(FronteiraAtual, fronteiraFinal, limiteDeProfundidade);
+							//Verifica se já achou o resultado dentro das fronteiras atuais
+							verificaResultado = verificaFronteira(FronteiraAtual.get(0), tbFinal);
 						
-						//Verifica se já achou o resultado dentro das fronteiras atuais
-						fronteiraFinal = verificaFronteira(FronteiraAtual, tbFinal);
+							if(verificaResultado == false) {
+							
+								//Se o primeiro da lista não tiver em sua profundidade máxima e ainda não foi expandido
+								if(FronteiraAtual.get(0).profundidade < limiteDeProfundidade && FronteiraAtual.get(0).expansao == false)
+									expandeFronteira(FronteiraAtual.get(0),FronteiraAtual); //expande a fronteira
+								else
+									FronteiraAtual.remove(0); //Se não, retira da lista, pois já foi expandido, ou seu limite de profundidade já foi atingido
 						
-					}while(fronteiraFinal == null && verificaLimite == true);
+								//Verifica se todos os nós foram expandidos ao seu limite
+								//verificaLimite = limiteDeProfundidade(FronteiraAtual, limiteDeProfundidade);
+						}
+				
+					}
 
-					if( verificaLimite == false) { //Se o limite for atingido e ainda não encontrou o resultado
+					if( verificaResultado == false) { //Se o limite for atingido e ainda não encontrou o resultado
 						JOptionPane.showMessageDialog(null, "Resultado não encontrado até a profundidade " + limiteDeProfundidade);
 					}
 					
@@ -107,14 +137,7 @@ public class Main {
 					diff = end - init;
 					
 					//MOSTRA RESULTADOS FINAIS
-					if(fronteiraFinal != null) {
-						
-//						for(int i=0; i< FronteiraAtual.size();i++) {
-//							
-//							if(FronteiraAtual.get(i).profundidade < fronteiraFinal.profundidade && FronteiraAtual.get(i).toString().equals(tbFinal.toString())) {
-//								fronteiraFinal = FronteiraAtual.get(i);
-//							}
-//						}
+					if(verificaResultado == true) {
 						
 						String tabuleiroFinal = "-------------\n";
 						
@@ -127,38 +150,33 @@ public class Main {
 							tabuleiroFinal += "\n-------------\n";
 						}
 						
-						
-						String tabuleiro = "-------------\n";
+						String tabuleiroResultado = "-------------\n";
 						
 						for(int i = 0; i<=2; i++) {
-							tabuleiro += "| ";
+							tabuleiroResultado += "| ";
 							for(int j = 0; j<=2; j++) {
-								tabuleiro += fronteiraFinal.tabuleiro[i][j] + " | ";
+								tabuleiroResultado += FronteiraAtual.get(0).tabuleiro[i][j] + " | ";
 							}
 							
-							tabuleiro += "\n-------------\n";
+							tabuleiroResultado += "\n-------------\n";
 						}
 						
-						JOptionPane.showMessageDialog(null,"Tabuleiro Final : \n" + tabuleiroFinal + "\n Resultado Final : \n" + tabuleiro
-								+ "\n Foi encontrado na profundidade: " + fronteiraFinal.profundidade
+						JOptionPane.showMessageDialog(null,"Tabuleiro Final : \n" + tabuleiroFinal + "\n Resultado Final : \n" + tabuleiroResultado
+								+ "\n Foi encontrado na profundidade: " + FronteiraAtual.get(0).profundidade
 								+ "\n "
-								+ ""
-								+ ""
-								+ ""
-								+ ""
 								+ "A Solução foi encontrada em: " + (diff / 1000) + " segundos");
 						
 						// MOSTRA MOVIMENTOS NO CONSOLE
 				
 						String caminho = "";
-						int n = fronteiraFinal.profundidade + 1;
+						int n = FronteiraAtual.get(0).profundidade + 1;
 						
 						caminho += "-------------\n";
 						
 						for(int i = 0; i<=2; i++) {
 							caminho += "| ";
 							for(int j = 0; j<=2; j++) {
-								caminho += fronteiraFinal.tabuleiro[i][j] + " | ";
+								caminho += FronteiraAtual.get(0).tabuleiro[i][j] + " | ";
 							}
 							
 							caminho += "\n-------------\n";
@@ -166,23 +184,26 @@ public class Main {
 						
 						caminho += " Nº de movimentos: "+ n-- + "\n \n";
 						
+						Fronteira caminhoAntecessor =  new Fronteira();
+						caminhoAntecessor = FronteiraAtual.get(0);
+						
 						do {
 							
-							fronteiraFinal = fronteiraFinal.antecessor;
+							caminhoAntecessor = caminhoAntecessor.antecessor;
 	
 							caminho += "-------------\n";
 							
 							for(int i = 0; i<=2; i++) {
 								caminho += "| ";
 								for(int j = 0; j<=2; j++) {
-									caminho += fronteiraFinal.tabuleiro[i][j] + " | ";
+									caminho += caminhoAntecessor.tabuleiro[i][j] + " | ";
 								}
 								caminho += "\n-------------\n";
 							}
 							
 							caminho += " Nº de movimentos: "+ n-- + "\n \n";
 							
-						}while(!fronteiraFinal.toString().equals(tbInicial.toString()));
+						}while(!caminhoAntecessor.toString().equals(tbInicial.toString()));
 						
 						System.out.println(caminho);
 						
@@ -218,33 +239,53 @@ public class Main {
 	return Integer.parseInt(JOptionPane.showInputDialog(menu));
 	
 	}
+	 
+	 public static void preencheTabuleiros(Fronteira tb) { //preenche os tabuleiros no estado inicial e final (resultado que se quer chegar)
+
+			int op=0;
+			String tab = "-------------\n";
 	
-	
-	public static Fronteira verificaFronteira(ArrayList<Fronteira> fronteiraAtual, Fronteira fronteira ) {
-		
-		boolean verifica = false;
-		Fronteira f = new Fronteira();
-		f.profundidade = 0;
-		
-		for(int i=0; i<fronteiraAtual.size();i++) {
-			if(fronteiraAtual.get(i).toString().equals(fronteira.toString())) {
-				//if(fronteiraAtual.get(i).profundidade < f.profundidade) {
-					verifica = true;
-					f = fronteiraAtual.get(i);
-				//}
+			boolean verf = false; // controle para inserir apenas um espaço vazio no tabuleiro
+
+				for(int i = 0; i<=2; i++) {
+					tab += "| ";
+					for(int j = 0; j<=2; j++) {
+						op = Integer.parseInt(JOptionPane.showInputDialog("1 - Inserir um número para a próxima casa do tabuleiro \n"
+							+ "2 - Inserir espaço vazio no tabuleiro"));
+
+						if(op==1) { // verifica se o jogador quer colocar um número ou um espaço vazio
+							tb.tabuleiro[i][j] = (JOptionPane.showInputDialog("Digite o número.")); 
+							tab+= tb.tabuleiro[i][j] + " | ";
+							
+						}else {
+							if(verf == false) {
+								tb.tabuleiro[i][j] = ("  "); //preenche a casa do tabuleiro com espaço vazio
+								tab+= tb.tabuleiro[i][j] + " | ";
+								verf = true;
+								
+							}else {
+								JOptionPane.showMessageDialog(null, "Você só pode inserir um espaço vazio no tabuleiro!");
+								j--;
+							}
+						}
+						JOptionPane.showMessageDialog(null, tab); //mostar o tabuleiro a cada número inserido
+					}
+					
+					tab+= "\n-------------\n";
+				}
 			}
-		}
-		
-		if(verifica == true)
-			return f;
-		else
-			return null;
-		
+	
+	
+	public static boolean verificaFronteira(Fronteira fronteiraAtual, Fronteira fronteiraFinal ) {
+
+		if(fronteiraAtual.toString().equals(fronteiraFinal.toString())) {
+			return true;
+		}else {
+			return false;
+		}	
 	}
 	
 	public static void expandeFronteira(Fronteira f, ArrayList<Fronteira> fronteiras) {
-		
-		if(f.expansao==false) { //Verifica se o no já foi expandido
 			
 			f.expansao = true; //Caso não tenha sido expandido, ele será expandido, setando agora a variavel expansao como verdadeira
 			
@@ -452,9 +493,6 @@ public class Main {
 				fronteiras.remove(f); //remove o nó expandido
 				//JOptionPane.showMessageDialog(null, "FIM da expansao");
 			
-		}else {
-			fronteiras.remove(f);
-		}
 	}
 	
 	public static void mostraMovimento(Fronteira fNew) {
