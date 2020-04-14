@@ -14,49 +14,49 @@ public class Main {
 		String tbi[][] = new String [3][3];
 		String tbf[][] = new String [3][3];
 		
-		long init, end, diff;
+		//long init, end, diff; //Calcular tempo de execuçãos
 		
 		// Dados já inseridos para teste
 		
-//		tbi[0][0] = "1";
-//		tbi[1][0] = "8";
-//		tbi[2][0] = "7";
-//		tbi[0][1] = "2";
-//		tbi[0][2] = "3";
-//		tbi[1][1] = " ";
-//		tbi[2][2] = "5";
-//		tbi[1][2] = "4";
-//		tbi[2][1] = "6";
-		
-//		tbf[0][0] = " ";
-//		tbf[1][0] = "3";
-//		tbf[2][0] = "6";
-//		tbf[0][1] = "2";
-//		tbf[0][2] = "5";
-//		tbf[1][1] = "8";
-//		tbf[2][2] = "4";
-//		tbf[1][2] = "7";
-//		tbf[2][1] = "1";
-		
 		tbi[0][0] = "1";
-		tbi[1][0] = "2";
-		tbi[2][0] = "3";
-		tbi[0][1] = "4";
-		tbi[0][2] = "5";
+		tbi[1][0] = "8";
+		tbi[2][0] = "7";
+		tbi[0][1] = "2";
+		tbi[0][2] = "3";
 		tbi[1][1] = " ";
-		tbi[2][2] = "7";
-		tbi[1][2] = "8";
+		tbi[2][2] = "5";
+		tbi[1][2] = "4";
 		tbi[2][1] = "6";
-
-		tbf[0][0] = "1";
-		tbf[1][0] = " ";
-		tbf[2][0] = "2";
-		tbf[0][1] = "4";
-		tbf[0][2] = "5";
+		
+		tbf[0][0] = " ";
+		tbf[1][0] = "3";
+		tbf[2][0] = "4";
+		tbf[0][1] = "5";
+		tbf[0][2] = "2";
 		tbf[1][1] = "8";
 		tbf[2][2] = "6";
 		tbf[1][2] = "7";
-		tbf[2][1] = "3";
+		tbf[2][1] = "1";
+		
+//		tbi[0][0] = "1";
+//		tbi[1][0] = "2";
+//		tbi[2][0] = "3";
+//		tbi[0][1] = "4";
+//		tbi[0][2] = "5";
+//		tbi[1][1] = " ";
+//		tbi[2][2] = "7";
+//		tbi[1][2] = "8";
+//		tbi[2][1] = "6";
+
+//		tbf[0][0] = "1";
+//		tbf[1][0] = " ";
+//		tbf[2][0] = "2";
+//		tbf[0][1] = "4";
+//		tbf[0][2] = "5";
+//		tbf[1][1] = "8";
+//		tbf[2][2] = "6";
+//		tbf[1][2] = "7";
+//		tbf[2][1] = "3";
 		
 		/*tbf[0][0] = "1";
 		tbf[1][0] = " ";
@@ -79,6 +79,8 @@ public class Main {
 //		tbf[2][1] = " ";
 		
 		tbInicial.tabuleiro = tbi;
+		tbInicial.antecessor = tbInicial;
+		
 		tbFinal.tabuleiro = tbf;
 		
 //		JOptionPane.showMessageDialog(null, "Preencha o tabuleiro inicial do jogo.");
@@ -86,10 +88,6 @@ public class Main {
 //		
 //		JOptionPane.showMessageDialog(null, "Preencha o tabuleiro final do jogo.");
 //		preencheTabuleiros(tbFinal);
-		
-		tbInicial.antecessor = tbInicial;
-		
-		FronteiraAtual.add(tbInicial);
 		
 		int op = 0;
 		
@@ -99,42 +97,52 @@ public class Main {
 				
 				case 1: //Busca em profundidade interativa
 					
-					init = System.currentTimeMillis();
+					//init = System.currentTimeMillis(); // inicia calculo de tempo;
 					
-					int limiteDeProfundidade; //limite de profundidade da busca
+					int limiteDeProfundidade, verificaLimite = 0; //limite de profundidade da busca
 					
 					boolean verificaResultado = false;
 					
 					limiteDeProfundidade = Integer.parseInt(JOptionPane.showInputDialog("Insira o limite de profundidade"));
 					
-						while(verificaResultado == false && FronteiraAtual.size() > 0){ // Enquanto não retornar o resultado correto ou o limite de profundidade não ser atingido
+					// Verifica nivel por nivel, até o limite de profundidade imposto pelo usuário, ou até achar um resultado antes da profundidade limite
+					// ou seja, irá reiniciar toda vez que não encontrar o resultado
+					while(verificaLimite <= limiteDeProfundidade && verificaResultado == false) { 
 						
-							//JOptionPane.showMessageDialog(null, limiteDeProfundidade);
+						FronteiraAtual.add(tbInicial); //Coloca o nó inicial (tabuleiro) novamente na lista que esta vazia
 						
-							//Verifica se já achou o resultado dentro das fronteiras atuais
+						while(verificaResultado == false && (!FronteiraAtual.isEmpty())){ // Enquanto não retornar o resultado correto ou a lista ficar vazia
+						
+							//Verifica se FronteiraAtual.get(0) (nó atual) é o resultado
 							verificaResultado = verificaFronteira(FronteiraAtual.get(0), tbFinal);
 						
-							if(verificaResultado == false) {
+							if(verificaResultado == false) { // Se o primeiro da lista não for o resultado, expande
 							
-								//Se o primeiro da lista não tiver em sua profundidade máxima e ainda não foi expandido
-								if(FronteiraAtual.get(0).profundidade < limiteDeProfundidade && FronteiraAtual.get(0).expansao == false)
+								//JOptionPane.showMessageDialog(null, "primeira verificação " + verificaLimite);
+								//Se o primeiro da lista não for o nó mais profundo, ou seja, ainda pode ser expandido para mais uma profundidade e ainda não foi expandido
+								if(FronteiraAtual.get(0).profundidade < verificaLimite)
 									expandeFronteira(FronteiraAtual.get(0),FronteiraAtual); //expande a fronteira
 								else
 									FronteiraAtual.remove(0); //Se não, retira da lista, pois já foi expandido, ou seu limite de profundidade já foi atingido
 						
 								//Verifica se todos os nós foram expandidos ao seu limite
 								//verificaLimite = limiteDeProfundidade(FronteiraAtual, limiteDeProfundidade);
+							}
 						}
-				
+					
+						//JOptionPane.showMessageDialog(null, verificaLimite + " "+ limiteDeProfundidade);
+						
+					verificaLimite++; //Passa para o próximo nível
+					
 					}
 
 					if( verificaResultado == false) { //Se o limite for atingido e ainda não encontrou o resultado
 						JOptionPane.showMessageDialog(null, "Resultado não encontrado até a profundidade " + limiteDeProfundidade);
 					}
 					
-					end = System.currentTimeMillis();
+					//end = System.currentTimeMillis();
 					
-					diff = end - init;
+					//diff = end - init;
 					
 					//MOSTRA RESULTADOS FINAIS
 					if(verificaResultado == true) {
@@ -163,8 +171,8 @@ public class Main {
 						
 						JOptionPane.showMessageDialog(null,"Tabuleiro Final : \n" + tabuleiroFinal + "\n Resultado Final : \n" + tabuleiroResultado
 								+ "\n Foi encontrado na profundidade: " + FronteiraAtual.get(0).profundidade
-								+ "\n "
-								+ "A Solução foi encontrada em: " + (diff / 1000) + " segundos");
+								+ "\n " );
+								//+ "A Solução foi encontrada em: " + (diff / 1000) + " segundos");
 						
 						// MOSTRA MOVIMENTOS NO CONSOLE
 				
@@ -208,6 +216,9 @@ public class Main {
 						System.out.println(caminho);
 						
 						JOptionPane.showMessageDialog(null, "Os movimentos feitos para a resolução do jogo podem ser encontrados no console");
+						
+						verificaLimite = 0;
+						FronteiraAtual.clear();
 					}
 						
 					break;
@@ -292,8 +303,8 @@ public class Main {
 			int pI=0; //Para recuperar a posição da peça vazia
 			int pJ=0; //Para recuperar a posição da peça vazia
 			
-			for(int i=0;i<3;i++) {   // Laço para verificar a posição da peça vazia
-				for(int j=0;j<3;j++) {
+			for(int i=0;i<=2;i++) {   // Laço para verificar a posição da peça vazia
+				for(int j=0;j<=2;j++) {
 					
 					if(f.tabuleiro[i][j].equals(" ")) { // pega a posição da peça vazia
 						pI = i;
@@ -362,8 +373,8 @@ public class Main {
 					
 					String tbParaCima [][] =  new String [3][3];
 					
-					for(int i=0;i<3;i++) {   // Atribui os valores antigos ao novo tabuleiro da noa fronteira
-						for(int j=0;j<3;j++) {
+					for(int i=0;i<=2;i++) {   // Atribui os valores antigos ao novo tabuleiro da noa fronteira
+						for(int j=0;j<=2;j++) {
 							tbParaCima[i][j] = f.tabuleiro[i][j];
 						}
 					}
@@ -511,19 +522,4 @@ public class Main {
 		JOptionPane.showMessageDialog(null, tabuleiroNew);
 	}
 	
-	public static boolean limiteDeProfundidade(ArrayList<Fronteira> fronteiras,Fronteira f, int limite) {
-		
-		boolean verifica = false;
-		
-		for(int i=0;i<fronteiras.size();i++) {
-			
-			if(fronteiras.get(i).profundidade < limite && fronteiras.get(i).expansao == false && f == null) {
-				verifica = true;
-			}
-		}
-		
-		return verifica;
-		
-	}
-
 }

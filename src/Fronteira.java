@@ -2,7 +2,7 @@ public class Fronteira {
 
 	String tabuleiro [][];
 	//ArrayList<Fronteira> fronteiras = new ArrayList<>();
-	int profundidade;
+	int profundidade = 0;
 	boolean expansao;
 	Fronteira antecessor;
 	
