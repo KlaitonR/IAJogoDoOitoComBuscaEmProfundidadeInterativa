@@ -7,7 +7,7 @@ public class Main {
 		// TODO Auto-generated method stub
 		
 		ArrayList<Fronteira> FronteiraAtual = new ArrayList<>();
-		ArrayList<Fronteira> nosDescobertos = new ArrayList<>();
+		//ArrayList<Fronteira> nosDescobertos = new ArrayList<>();
 		
 		Fronteira tbInicial = new Fronteira();
 		Fronteira tbFinal = new Fronteira();
@@ -15,84 +15,45 @@ public class Main {
 		String tbi[][] = new String [3][3];
 		String tbf[][] = new String [3][3];
 		
-		long init, end, diff; //Calcular tempo de execuçãos
-		
-//		JOptionPane.showMessageDialog(null, "Preencha o tabuleiro inicial do jogo.");
-//		preencheTabuleiros(tbInicial);
-//		
-//		JOptionPane.showMessageDialog(null, "Preencha o tabuleiro final do jogo.");
-//		preencheTabuleiros(tbFinal);
-		
 // Dados já inseridos para teste
-		
-//		tbi[0][0] = "1";
-//		tbi[1][0] = "8";
-//		tbi[2][0] = "7";
-//		tbi[0][1] = "2";
-//		tbi[0][2] = "3";
-//		tbi[1][1] = " ";
-//		tbi[2][2] = "5";
-//		tbi[1][2] = "4";
-//		tbi[2][1] = "6";
-		
-//		tbf[0][0] = " ";
-//		tbf[1][0] = "3";
-//		tbf[2][0] = "4";
-//		tbf[0][1] = "5";
-//		tbf[0][2] = "2";
-//		tbf[1][1] = "8";
-//		tbf[2][2] = "6";
-//		tbf[1][2] = "7";
-//		tbf[2][1] = "1";
-//		
-		tbi[0][0] = "1";
-		tbi[1][0] = "2";
-		tbi[2][0] = "3";
-		tbi[0][1] = "4";
-		tbi[0][2] = "5";
-		tbi[1][1] = " ";
-		tbi[2][2] = "7";
-		tbi[1][2] = "8";
-		tbi[2][1] = "6";
-
-//		tbf[0][0] = "1";
-//		tbf[1][0] = " ";
-//		tbf[2][0] = "2";
-//		tbf[0][1] = "4";
-//		tbf[0][2] = "5";
-//		tbf[1][1] = "8";
-//		tbf[2][2] = "6";
-//		tbf[1][2] = "7";
-//		tbf[2][1] = "3";
-		
-		/*tbf[0][0] = "1";
-		tbf[1][0] = " ";
-		tbf[2][0] = "2";
-		tbf[0][1] = "4";
-		tbf[0][2] = "5";
-		tbf[1][1] = "8";
-		tbf[2][2] = "6";
-		tbf[1][2] = "7";
-		tbf[2][1] = "3";*/
-		
-		tbf[0][0] = "2";
-		tbf[1][0] = "3";
-		tbf[2][0] = "1";
-		tbf[0][1] = "7";
-		tbf[0][2] = "5";
-		tbf[1][1] = "4";
-		tbf[2][2] = "6";
-		tbf[1][2] = "8";
-		tbf[2][1] = " ";
+//
+//				tbi[0][0] = "1";
+//				tbi[1][0] = "2";
+//				tbi[2][0] = "3";
+//				tbi[0][1] = "4";
+//				tbi[0][2] = "5";
+//				tbi[1][1] = " ";
+//				tbi[2][2] = "7";
+//				tbi[1][2] = "8";
+//				tbi[2][1] = "6";
+//				
+//				tbf[0][0] = "2";
+//				tbf[1][0] = "3";
+//				tbf[2][0] = "1";
+//				tbf[0][1] = "7";
+//				tbf[0][2] = "5";
+//				tbf[1][1] = "4";
+//				tbf[2][2] = "6";
+//				tbf[1][2] = "8";
+//				tbf[2][1] = " ";
 		
 		tbInicial.tabuleiro = tbi; // inicia a fronteira inicial
 		tbInicial.antecessor = tbInicial; //Coloca como antecessor dela, ela mesma
 		
 		tbFinal.tabuleiro = tbf; // inicia a fronteira final
 		
-		tbInicial.custo = BuscaGulosa.calculaCusto(tbInicial, tbFinal); //Inicia o custo da fronteira inicial
+		//tbInicial.custo = BuscaGulosa.calculaCusto(tbInicial, tbFinal); //Inicia o custo da fronteira inicial
+		
+		//Preencher o tabuleiro inicial
+		JOptionPane.showMessageDialog(null, "Preencha o tabuleiro inicial do jogo.");
+		preencheTabuleiros(tbInicial);
+		
+		//Preencher o tabuleiro final
+		JOptionPane.showMessageDialog(null, "Preencha o tabuleiro final do jogo.");
+		preencheTabuleiros(tbFinal);
 		
 		boolean verificaResultado = false; // inicia a verificação de resultado
+		long init, end, diff; //Calcular tempo de execuçãos, pega o momento inicial da execução
 		
 		int op = 0;
 		
@@ -106,12 +67,14 @@ public class Main {
 					
 					BuscaEmAprofundamentoInterativo buscaEmAprofundamentoInterativo = new BuscaEmAprofundamentoInterativo(FronteiraAtual, tbFinal, tbInicial);
 					
-					int limiteDeProfundidade, verificaLimite = 0; //limite de profundidade da busca
+					int limiteDeProfundidade, verificaLimite = 0; //limite de profundidade da  e verificação de profundidade da busca
 					
 					limiteDeProfundidade = Integer.parseInt(JOptionPane.showInputDialog("Insira o limite de profundidade"));
 					
-					// Verifica nivel por nivel, até o limite de profundidade imposto pelo usuário, ou até achar um resultado antes da profundidade limite
-					// ou seja, irá reiniciar toda vez que não encontrar o resultado
+					// Verifica nível por nível, até o limite de profundidade imposto pelo usuário, 
+					//ou até achar um resultado antes da profundidade limite,
+					// ou seja, irá reiniciar a busca expandindo para mais um nível de profundidade, 
+					//até chegar na profundidade imposta pelo usuário, toda vez que não encontrar o resultado
 					while(verificaLimite <= limiteDeProfundidade && verificaResultado == false) { 
 						
 						FronteiraAtual.add(tbInicial); //Coloca o nó inicial (tabuleiro) novamente na lista que esta vazia
@@ -120,7 +83,7 @@ public class Main {
 						
 							if(verificaResultado == false) { // Se o primeiro da lista não for o resultado, expande
 							
-								//Se o primeiro da lista não for o nó mais profundo, ou seja, ainda pode ser expandido para mais uma profundidade e ainda não foi expandido
+								//Se o primeiro da lista não for o nó mais profundo, ou seja, ainda pode ser expandido para mais uma profundidade
 								if(FronteiraAtual.get(0).profundidade < verificaLimite)
 									verificaResultado = buscaEmAprofundamentoInterativo.expandeFronteira(FronteiraAtual.get(0), tbFinal,FronteiraAtual); //expande a fronteira
 								else
@@ -128,23 +91,31 @@ public class Main {
 							}
 						}
 						
-					verificaLimite++; //Passa para o próximo nível
+					
+						//Caso o resultado seja verdadeiro, irá ignorar, caso seja falso, irá aprofundar mais 1 nível
+						if(verificaResultado == false) {
+							verificaLimite++; //Passa para o próximo nível de profundidade
+							FronteiraAtual.clear(); //Limpa o Array
+						}
 					
 					}
 
+					//Verifica se não achou o resultado
 					if( verificaResultado == false) { //Se o limite for atingido e ainda não encontrou o resultado
 						JOptionPane.showMessageDialog(null, "Resultado não encontrado até a profundidade " + limiteDeProfundidade);
+						FronteiraAtual.clear(); //Limpa o Array
 					}
 					
-					end = System.currentTimeMillis();
-					
-					diff = end - init;
-					
-					//MOSTRA RESULTADOS FINAIS
+					//MOSTRA RESULTADOS FINAIS caso tenha achado o resultado
 					if(verificaResultado == true) {
+						
+						end = System.currentTimeMillis(); // pega o momento final 
+						
+						diff = end - init; //guarda a diferença
 					
 						mostraResultado(tbFinal, tbInicial, FronteiraAtual, diff, op);
 						
+						//Reinicia as variaveis para uma nova busca
 						verificaLimite = 0;
 						FronteiraAtual.clear();
 						verificaResultado = false;
@@ -152,65 +123,65 @@ public class Main {
 						
 					break;
 					
-				case 2: //Busca gulosa
-					
-					init = System.currentTimeMillis(); // inicia calculo de tempo;
-					
-					BuscaGulosa buscaGulosa = new BuscaGulosa(FronteiraAtual,nosDescobertos, tbFinal, tbInicial);
-					Fronteira menorCustoEstimado = new Fronteira();
-					
-					FronteiraAtual.add(tbInicial); //Coloca o nó inicial (tabuleiro) novamente na lista que esta vazia
-					
-					while(verificaResultado == false && !FronteiraAtual.isEmpty()) { // enquanto não chegar no resultado, ou houver fronteiras na lista
-						
-						menorCustoEstimado = buscaGulosa.menorCusto(FronteiraAtual);  //Procura pelo nó fronteira com menor custo estimado
-
-						verificaResultado = buscaGulosa.expandeFronteira(menorCustoEstimado, tbFinal, FronteiraAtual, nosDescobertos); // expande e verifica o nó fronteira
-						
-					}
-					
-					end = System.currentTimeMillis();
-					
-					diff = end - init;
-					
-					if(verificaResultado == true)
-						mostraResultado(tbFinal, tbInicial, FronteiraAtual, diff, op);
-					else
-						JOptionPane.showMessageDialog(null, "Resultado não encontrado");
-					
-					verificaResultado = false;
-					
-					break;
-				
-				case 3: //Busca A*
-					
-					init = System.currentTimeMillis(); // inicia calculo de tempo;
-					
-					BuscaA buscaA = new BuscaA(FronteiraAtual, nosDescobertos, tbFinal, tbInicial);
-					Fronteira menorCusto = new Fronteira();
-					
-					FronteiraAtual.add(tbInicial); //Coloca o nó inicial (tabuleiro) novamente na lista que esta vazia
-					
-					while(verificaResultado == false && !FronteiraAtual.isEmpty()) { // enquanto não chegar no resultado, ou houver fronteiras na lista
-						
-						menorCusto = buscaA.menorCusto(FronteiraAtual); //Procura pelo nó fronteira com menor custo
-
-						verificaResultado = buscaA.expandeFronteira(menorCusto, tbFinal, FronteiraAtual, nosDescobertos); // expande e verifica o nó fronteira
-						
-					}
-					
-					end = System.currentTimeMillis();
-					
-					diff = end - init;
-					
-					if(verificaResultado == true)
-						mostraResultado(tbFinal, tbInicial, FronteiraAtual, diff, op);
-					else
-						JOptionPane.showMessageDialog(null, "Resultado não encontrado");
-					
-					verificaResultado = false;
-				
-					break;
+//				case 2: //Busca gulosa
+//					
+//					init = System.currentTimeMillis(); // inicia calculo de tempo;
+//					
+//					BuscaGulosa buscaGulosa = new BuscaGulosa(FronteiraAtual, tbFinal, tbInicial);
+//					Fronteira menorCustoEstimado = new Fronteira();
+//					
+//					FronteiraAtual.add(tbInicial); //Coloca o nó inicial (tabuleiro) novamente na lista que esta vazia
+//					
+//					while(verificaResultado == false && !FronteiraAtual.isEmpty()) { // enquanto não chegar no resultado, ou houver fronteiras na lista
+//						
+//						menorCustoEstimado = buscaGulosa.menorCusto(FronteiraAtual);  //Procura pelo nó fronteira com menor custo estimado
+//
+//						verificaResultado = buscaGulosa.expandeFronteira(menorCustoEstimado, tbFinal, FronteiraAtual); // expande e verifica o nó fronteira
+//						
+//					}
+//					
+//					end = System.currentTimeMillis();
+//					
+//					diff = end - init;
+//					
+//					if(verificaResultado == true)
+//						mostraResultado(tbFinal, tbInicial, FronteiraAtual, diff, op);
+//					else
+//						JOptionPane.showMessageDialog(null, "Resultado não encontrado");
+//					
+//					verificaResultado = false;
+//					
+//					break;
+//				
+//				case 3: //Busca A*
+//					
+//					init = System.currentTimeMillis(); // inicia calculo de tempo;
+//					
+//					BuscaA buscaA = new BuscaA(FronteiraAtual, tbFinal, tbInicial);
+//					Fronteira menorCusto = new Fronteira();
+//					
+//					FronteiraAtual.add(tbInicial); //Coloca o nó inicial (tabuleiro) novamente na lista que esta vazia
+//					
+//					while(verificaResultado == false && !FronteiraAtual.isEmpty()) { // enquanto não chegar no resultado, ou houver fronteiras na lista
+//						
+//						menorCusto = buscaA.menorCusto(FronteiraAtual); //Procura pelo nó fronteira com menor custo
+//
+//						verificaResultado = buscaA.expandeFronteira(menorCusto, tbFinal, FronteiraAtual); // expande e verifica o nó fronteira
+//						
+//					}
+//					
+//					end = System.currentTimeMillis();
+//					
+//					diff = end - init;
+//					
+//					if(verificaResultado == true)
+//						mostraResultado(tbFinal, tbInicial, FronteiraAtual, diff, op);
+//					else
+//						JOptionPane.showMessageDialog(null, "Resultado não encontrado");
+//					
+//					verificaResultado = false;
+//				
+//					break;
 					
 				}
 			
@@ -224,9 +195,9 @@ public class Main {
 		
 		String menu ="Qual o tipo de busca? \n"
 					+ "1 - Busca em profundidade interativa. \n"
-					+ "2 - Busca gulosa. \n"
-					+ "3 - Busca A*. \n"
-					+ "4 - SAIR";
+//					+ "2 - Busca gulosa. \n"
+//					+ "3 - Busca A*. \n"
+					+ "2 - SAIR";
 				
 	return Integer.parseInt(JOptionPane.showInputDialog(menu));
 	
@@ -340,105 +311,105 @@ public class Main {
 				JOptionPane.showMessageDialog(null, "Os movimentos feitos para a resolução do jogo podem ser encontrados no console");
 			}
 			
-			if(op == 2) {
-				
-				JOptionPane.showMessageDialog(null,"Tabuleiro Final : \n" + tabuleiroFinal + "\n Resultado Final : \n" + tabuleiroResultado
-						+ "A Solução foi encontrada em: " + (diff / 1000) + " segundos");
-				
-				// MOSTRA MOVIMENTOS NO CONSOLE
-				
-				String caminho = "";
-				int n = FronteiraAtual.get(0).profundidade + 1;
-				
-				caminho += "-------------\n";
-				
-				for(int i = 0; i<=2; i++) {
-					caminho += "| ";
-					for(int j = 0; j<=2; j++) {
-						caminho += FronteiraAtual.get(0).tabuleiro[i][j] + " | ";
-					}
-					
-					caminho += "\n-------------\n";
-				}
-				
-				caminho += "Nº de movimentos: "+ n-- +"\n Custo atual: " + FronteiraAtual.get(0).custo +"\n \n";
-				
-				Fronteira caminhoAntecessor =  new Fronteira();
-				caminhoAntecessor = FronteiraAtual.get(0);
-				
-				do {
-					
-					caminhoAntecessor = caminhoAntecessor.antecessor;
-	
-					caminho += "-------------\n";
-					
-					for(int i = 0; i<=2; i++) {
-						caminho += "| ";
-						for(int j = 0; j<=2; j++) {
-							caminho += caminhoAntecessor.tabuleiro[i][j] + " | ";
-						}
-						caminho += "\n-------------\n";
-					}
-					
-					caminho += "Nº de movimentos: "+ n-- +"\n Custo atual: " + caminhoAntecessor.custo +"\n \n";
-					
-				}while(!caminhoAntecessor.toString().equals(tbInicial.toString()));
-				
-				System.out.println(caminho);
-				
-				JOptionPane.showMessageDialog(null, "Os movimentos feitos para a resolução do jogo podem ser encontrados no console");
-				
-			}
-			
-			if(op == 3) {
-				
-				JOptionPane.showMessageDialog(null,"Tabuleiro Final : \n" + tabuleiroFinal + "\n Resultado Final : \n" + tabuleiroResultado
-						+ "A Solução foi encontrada em: " + (diff / 1000) + " segundos");
-				
-				// MOSTRA MOVIMENTOS NO CONSOLE
-				
-				String caminho = "";
-				int n = FronteiraAtual.get(0).profundidade + 1;
-				
-				caminho += "-------------\n";
-				
-				for(int i = 0; i<=2; i++) {
-					caminho += "| ";
-					for(int j = 0; j<=2; j++) {
-						caminho += FronteiraAtual.get(0).tabuleiro[i][j] + " | ";
-					}
-					
-					caminho += "\n-------------\n";
-				}
-				
-				caminho += "Nº de movimentos: "+ n-- +"\n Custo atual: " + FronteiraAtual.get(0).custo +"\n \n";
-				
-				Fronteira caminhoAntecessor =  new Fronteira();
-				caminhoAntecessor = FronteiraAtual.get(0);
-				
-				do {
-					
-					caminhoAntecessor = caminhoAntecessor.antecessor;
-	
-					caminho += "-------------\n";
-					
-					for(int i = 0; i<=2; i++) {
-						caminho += "| ";
-						for(int j = 0; j<=2; j++) {
-							caminho += caminhoAntecessor.tabuleiro[i][j] + " | ";
-						}
-						caminho += "\n-------------\n";
-					}
-					
-					caminho += "Nº de movimentos: "+ n-- +"\n Custo atual: " + caminhoAntecessor.custo +"\n \n";
-					
-				}while(!caminhoAntecessor.toString().equals(tbInicial.toString()));
-				
-				System.out.println(caminho);
-				
-				JOptionPane.showMessageDialog(null, "Os movimentos feitos para a resolução do jogo podem ser encontrados no console");
-				
-			}
+//			if(op == 2) {
+//				
+//				JOptionPane.showMessageDialog(null,"Tabuleiro Final : \n" + tabuleiroFinal + "\n Resultado Final : \n" + tabuleiroResultado
+//						+ "A Solução foi encontrada em: " + (diff / 1000) + " segundos");
+//				
+//				// MOSTRA MOVIMENTOS NO CONSOLE
+//				
+//				String caminho = "";
+//				int n = FronteiraAtual.get(0).profundidade + 1;
+//				
+//				caminho += "-------------\n";
+//				
+//				for(int i = 0; i<=2; i++) {
+//					caminho += "| ";
+//					for(int j = 0; j<=2; j++) {
+//						caminho += FronteiraAtual.get(0).tabuleiro[i][j] + " | ";
+//					}
+//					
+//					caminho += "\n-------------\n";
+//				}
+//				
+//				caminho += "Nº de movimentos: "+ n-- +"\n Custo atual: " + FronteiraAtual.get(0).custo +"\n \n";
+//				
+//				Fronteira caminhoAntecessor =  new Fronteira();
+//				caminhoAntecessor = FronteiraAtual.get(0);
+//				
+//				do {
+//					
+//					caminhoAntecessor = caminhoAntecessor.antecessor;
+//	
+//					caminho += "-------------\n";
+//					
+//					for(int i = 0; i<=2; i++) {
+//						caminho += "| ";
+//						for(int j = 0; j<=2; j++) {
+//							caminho += caminhoAntecessor.tabuleiro[i][j] + " | ";
+//						}
+//						caminho += "\n-------------\n";
+//					}
+//					
+//					caminho += "Nº de movimentos: "+ n-- +"\n Custo atual: " + caminhoAntecessor.custo +"\n \n";
+//					
+//				}while(!caminhoAntecessor.toString().equals(tbInicial.toString()));
+//				
+//				System.out.println(caminho);
+//				
+//				JOptionPane.showMessageDialog(null, "Os movimentos feitos para a resolução do jogo podem ser encontrados no console");
+//				
+//			}
+//			
+//			if(op == 3) {
+//				
+//				JOptionPane.showMessageDialog(null,"Tabuleiro Final : \n" + tabuleiroFinal + "\n Resultado Final : \n" + tabuleiroResultado
+//						+ "A Solução foi encontrada em: " + (diff / 1000) + " segundos");
+//				
+//				// MOSTRA MOVIMENTOS NO CONSOLE
+//				
+//				String caminho = "";
+//				int n = FronteiraAtual.get(0).profundidade + 1;
+//				
+//				caminho += "-------------\n";
+//				
+//				for(int i = 0; i<=2; i++) {
+//					caminho += "| ";
+//					for(int j = 0; j<=2; j++) {
+//						caminho += FronteiraAtual.get(0).tabuleiro[i][j] + " | ";
+//					}
+//					
+//					caminho += "\n-------------\n";
+//				}
+//				
+//				caminho += "Nº de movimentos: "+ n-- +"\n Custo atual: " + FronteiraAtual.get(0).custo +"\n \n";
+//				
+//				Fronteira caminhoAntecessor =  new Fronteira();
+//				caminhoAntecessor = FronteiraAtual.get(0);
+//				
+//				do {
+//					
+//					caminhoAntecessor = caminhoAntecessor.antecessor;
+//	
+//					caminho += "-------------\n";
+//					
+//					for(int i = 0; i<=2; i++) {
+//						caminho += "| ";
+//						for(int j = 0; j<=2; j++) {
+//							caminho += caminhoAntecessor.tabuleiro[i][j] + " | ";
+//						}
+//						caminho += "\n-------------\n";
+//					}
+//					
+//					caminho += "Nº de movimentos: "+ n-- +"\n Custo atual: " + caminhoAntecessor.custo +"\n \n";
+//					
+//				}while(!caminhoAntecessor.toString().equals(tbInicial.toString()));
+//				
+//				System.out.println(caminho);
+//				
+//				JOptionPane.showMessageDialog(null, "Os movimentos feitos para a resolução do jogo podem ser encontrados no console");
+//				
+//			}
 	 }
 	 
 	 
