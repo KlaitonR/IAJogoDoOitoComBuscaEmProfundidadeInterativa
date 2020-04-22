@@ -4,7 +4,6 @@ public class Fronteira {
 	//ArrayList<Fronteira> fronteiras = new ArrayList<>();
 	int profundidade = 0;
 	int custo;
-	boolean expansao;
 	Fronteira antecessor;
 	
 	public String toString() {

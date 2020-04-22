@@ -7,6 +7,7 @@ public class Main {
 		// TODO Auto-generated method stub
 		
 		ArrayList<Fronteira> FronteiraAtual = new ArrayList<>();
+		ArrayList<Fronteira> nosDescobertos = new ArrayList<>();
 		
 		Fronteira tbInicial = new Fronteira();
 		Fronteira tbFinal = new Fronteira();
@@ -43,7 +44,7 @@ public class Main {
 //		tbf[2][2] = "6";
 //		tbf[1][2] = "7";
 //		tbf[2][1] = "1";
-		
+//		
 		tbi[0][0] = "1";
 		tbi[1][0] = "2";
 		tbi[2][0] = "3";
@@ -54,15 +55,15 @@ public class Main {
 		tbi[1][2] = "8";
 		tbi[2][1] = "6";
 
-		tbf[0][0] = "1";
-		tbf[1][0] = " ";
-		tbf[2][0] = "2";
-		tbf[0][1] = "4";
-		tbf[0][2] = "5";
-		tbf[1][1] = "8";
-		tbf[2][2] = "6";
-		tbf[1][2] = "7";
-		tbf[2][1] = "3";
+//		tbf[0][0] = "1";
+//		tbf[1][0] = " ";
+//		tbf[2][0] = "2";
+//		tbf[0][1] = "4";
+//		tbf[0][2] = "5";
+//		tbf[1][1] = "8";
+//		tbf[2][2] = "6";
+//		tbf[1][2] = "7";
+//		tbf[2][1] = "3";
 		
 		/*tbf[0][0] = "1";
 		tbf[1][0] = " ";
@@ -74,15 +75,15 @@ public class Main {
 		tbf[1][2] = "7";
 		tbf[2][1] = "3";*/
 		
-//		tbf[0][0] = "2";
-//		tbf[1][0] = "3";
-//		tbf[2][0] = "1";
-//		tbf[0][1] = "7";
-//		tbf[0][2] = "5";
-//		tbf[1][1] = "4";
-//		tbf[2][2] = "6";
-//		tbf[1][2] = "8";
-//		tbf[2][1] = " ";
+		tbf[0][0] = "2";
+		tbf[1][0] = "3";
+		tbf[2][0] = "1";
+		tbf[0][1] = "7";
+		tbf[0][2] = "5";
+		tbf[1][1] = "4";
+		tbf[2][2] = "6";
+		tbf[1][2] = "8";
+		tbf[2][1] = " ";
 		
 		tbInicial.tabuleiro = tbi; // inicia a fronteira inicial
 		tbInicial.antecessor = tbInicial; //Coloca como antecessor dela, ela mesma
@@ -155,7 +156,7 @@ public class Main {
 					
 					init = System.currentTimeMillis(); // inicia calculo de tempo;
 					
-					BuscaGulosa buscaGulosa = new BuscaGulosa(FronteiraAtual, tbFinal, tbInicial);
+					BuscaGulosa buscaGulosa = new BuscaGulosa(FronteiraAtual,nosDescobertos, tbFinal, tbInicial);
 					Fronteira menorCustoEstimado = new Fronteira();
 					
 					FronteiraAtual.add(tbInicial); //Coloca o nó inicial (tabuleiro) novamente na lista que esta vazia
@@ -164,7 +165,7 @@ public class Main {
 						
 						menorCustoEstimado = buscaGulosa.menorCusto(FronteiraAtual);  //Procura pelo nó fronteira com menor custo estimado
 
-						verificaResultado = buscaGulosa.expandeFronteira(menorCustoEstimado, tbFinal, FronteiraAtual); // expande e verifica o nó fronteira
+						verificaResultado = buscaGulosa.expandeFronteira(menorCustoEstimado, tbFinal, FronteiraAtual, nosDescobertos); // expande e verifica o nó fronteira
 						
 					}
 					
@@ -185,7 +186,7 @@ public class Main {
 					
 					init = System.currentTimeMillis(); // inicia calculo de tempo;
 					
-					BuscaA buscaA = new BuscaA(FronteiraAtual, tbFinal, tbInicial);
+					BuscaA buscaA = new BuscaA(FronteiraAtual, nosDescobertos, tbFinal, tbInicial);
 					Fronteira menorCusto = new Fronteira();
 					
 					FronteiraAtual.add(tbInicial); //Coloca o nó inicial (tabuleiro) novamente na lista que esta vazia
@@ -194,7 +195,7 @@ public class Main {
 						
 						menorCusto = buscaA.menorCusto(FronteiraAtual); //Procura pelo nó fronteira com menor custo
 
-						verificaResultado = buscaA.expandeFronteira(menorCusto, tbFinal, FronteiraAtual); // expande e verifica o nó fronteira
+						verificaResultado = buscaA.expandeFronteira(menorCusto, tbFinal, FronteiraAtual, nosDescobertos); // expande e verifica o nó fronteira
 						
 					}
 					

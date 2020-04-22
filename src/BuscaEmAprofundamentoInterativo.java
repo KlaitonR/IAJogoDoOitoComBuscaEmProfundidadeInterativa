@@ -39,7 +39,6 @@ public class BuscaEmAprofundamentoInterativo {
 	
 	public boolean expandeFronteira(Fronteira f, Fronteira frontFinal, ArrayList<Fronteira> fronteiras) {
 			
-			f.expansao = true; //Caso não tenha sido expandido, ele será expandido, setando agora a variavel expansao como verdadeira
 			boolean verifica = false;
 			
 			int pI=0; //Para recuperar a posição da peça vazia

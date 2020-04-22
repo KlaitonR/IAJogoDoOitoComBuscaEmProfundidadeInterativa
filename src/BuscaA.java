@@ -3,28 +3,28 @@ import java.util.ArrayList;
 public class BuscaA {
 	Fronteira tbInicial;
 	Fronteira tbFinal;
-	ArrayList<Fronteira> fronteiraAtual;
+	ArrayList<Fronteira> fronteiras;
+	ArrayList<Fronteira> nosDescobertos;
 	
-	public BuscaA(ArrayList<Fronteira> fronteiraAtual, Fronteira tbFinal, Fronteira tbInicial) {
+	public BuscaA(ArrayList<Fronteira> fronteiras, ArrayList<Fronteira>nosDescobertos, Fronteira tbFinal, Fronteira tbInicial) {
 		
 		this.tbInicial = tbInicial;
 		this.tbFinal = tbFinal;
-		this.fronteiraAtual = fronteiraAtual;
-		
+		this.fronteiras = fronteiras;
+		this.nosDescobertos = nosDescobertos;
 	}
 	
-//	public static boolean verificaFronteira(Fronteira fronteiraAtual, Fronteira fronteiraFinal ) {
-//
-//		if(fronteiraAtual.toString().equals(fronteiraFinal.toString())) {
-//			return true;
-//		}else {
-//			return false;
-//		}	
-//	}
+	public static boolean verificaFronteira(Fronteira fronteiraAtual, Fronteira fronteiraFinal ) {
+
+		if(fronteiraAtual.toString().equals(fronteiraFinal.toString())) {
+			return true;
+		}else {
+			return false;
+		}	
+	}
 	
-	public boolean expandeFronteira(Fronteira f, Fronteira frontFinal, ArrayList<Fronteira> fronteiras) {
+	public boolean expandeFronteira(Fronteira f, Fronteira frontFinal, ArrayList<Fronteira> fronteiras, ArrayList<Fronteira> nosDescobertos) {
 		
-		f.expansao = true; //Caso não tenha sido expandido, ele será expandido, setando agora a variavel expansao como verdadeira
 		boolean verifica = false;
 		
 		int pI=0; //Para recuperar a posição da peça vazia
@@ -111,19 +111,18 @@ public class BuscaA {
 				tbParaCima[pI][pJ] = tbParaCima[pI - 1][pJ]; //Faz os movimentos do tabuleiro
 				tbParaCima[pI - 1][pJ] = " ";
 				
-				//JOptionPane.showMessageDialog(null, novaFronteiraParaCima.toString() +"\n"+ f.antecessor.toString());
-				
-				//Verifica se o tabuleiro criado não é igual ao antecessor de seu antecessor (se não está voltando a uma joga que já foi feita)
-				if(!novaFronteiraParaCima.toString().equals(f.antecessor.toString()) && !novaFronteiraParaCima.toString().equals(tbInicial.toString())) { //CASO SEJA IGUAL, ESSA FRONTEIRA JÁ EXISTE
+				if(!novaFronteiraParaCima.toString().equals(f.antecessor.toString()) && //Verifica se o tabuleiro criado não é igual ao antecessor de seu antecessor (se não está voltando a uma joga que já foi feita)
+				   !novaFronteiraParaCima.toString().equals(tbInicial.toString()) && // 
+				   verificaDuplaExpansao(novaFronteiraParaCima, nosDescobertos) == false) {  // Verifica se essa jogada já foi feita
 					
 					novaFronteiraParaCima.antecessor = f; //Guarda seu antecessor para recuperar o caminho
 					novaFronteiraParaCima.profundidade = novaFronteiraParaCima.antecessor.profundidade + 1;
 					novaFronteiraParaCima.custo = calculaCusto(f,frontFinal); // Calcula custo
-					
 					fronteiras.add(0,novaFronteiraParaCima);  //Adiciona a nova fronteira na lista de fronteiras
-					//mostraMovimento(novaFronteiraParaCima);
-					//JOptionPane.showMessageDialog(null, "prof nova: " + novaFronteiraParaCima.profundidade + "prof antiga: " + f.profundidade);
-					//verifica = verificaFronteira(novaFronteiraParaCima, frontFinal);
+					mostraMovimento(novaFronteiraParaCima);
+					verifica = verificaFronteira(novaFronteiraParaCima, frontFinal);
+					
+					nosDescobertos.add(novaFronteiraParaCima);
 					
 					if(novaFronteiraParaCima.custo == 0) 
 						verifica = true;
@@ -148,20 +147,18 @@ public class BuscaA {
 				tbEsquerda[pI][pJ] = tbEsquerda[pI][pJ - 1]; 
 				tbEsquerda[pI][pJ - 1] = " ";
 				
-				//JOptionPane.showMessageDialog(null, novaFronteiraEsquerda.toString() +"\n"+ f.antecessor.toString());
-				
-				if(!novaFronteiraEsquerda.toString().equals(f.antecessor.toString()) && !novaFronteiraEsquerda.toString().equals(tbInicial.toString())) { 
+				if(!novaFronteiraEsquerda.toString().equals(f.antecessor.toString()) &&
+				   !novaFronteiraEsquerda.toString().equals(tbInicial.toString()) &&
+				   verificaDuplaExpansao(novaFronteiraEsquerda, nosDescobertos) == false) { 
 			
 					novaFronteiraEsquerda.antecessor = f;
 					novaFronteiraEsquerda.profundidade = novaFronteiraEsquerda.antecessor.profundidade + 1;
 					novaFronteiraEsquerda.custo = calculaCusto(f, frontFinal);
-					
-					//f.fronteiras.add(novaFronteiraEsquerda);
 					fronteiras.add(0,novaFronteiraEsquerda);
-					//mostraMovimento(novaFronteiraEsquerda);
-					//	JOptionPane.showMessageDialog(null, "prof nova: " + novaFronteiraEsquerda.profundidade + "prof antiga: " + f.profundidade);
-		
-					//verifica = verificaFronteira(novaFronteiraEsquerda, frontFinal);
+					mostraMovimento(novaFronteiraEsquerda);
+					verifica = verificaFronteira(novaFronteiraEsquerda, frontFinal);
+					
+					nosDescobertos.add(novaFronteiraEsquerda);
 					
 					if(novaFronteiraEsquerda.custo == 0) 
 						verifica = true;
@@ -187,20 +184,18 @@ public class BuscaA {
 				tbParaBaixo[pI][pJ] = tbParaBaixo[pI + 1][pJ]; 
 				tbParaBaixo[pI + 1][pJ] = " ";
 				
-				
-				//JOptionPane.showMessageDialog(null, novaFronteiraParaBaixo.toString() +"\n"+ f.antecessor.toString());
-				
-				if(!novaFronteiraParaBaixo.toString().equals(f.antecessor.toString()) && !novaFronteiraParaBaixo.toString().equals(tbInicial.toString())) { 
+				if(!novaFronteiraParaBaixo.toString().equals(f.antecessor.toString()) &&
+				   !novaFronteiraParaBaixo.toString().equals(tbInicial.toString()) && 
+				   verificaDuplaExpansao(novaFronteiraParaBaixo, nosDescobertos) == false){ 
 		
 					novaFronteiraParaBaixo.antecessor = f;
 					novaFronteiraParaBaixo.profundidade = novaFronteiraParaBaixo.antecessor.profundidade + 1;
 					novaFronteiraParaBaixo.custo = calculaCusto(f, frontFinal);
-					
-					//f.fronteiras.add(novaFronteiraParaBaixo);
 					fronteiras.add(0,novaFronteiraParaBaixo);  
-					//mostraMovimento(novaFronteiraParaBaixo);
-					//	JOptionPane.showMessageDialog(null, "prof nova: " + novaFronteiraParaBaixo.profundidade + "prof antiga: " + f.profundidade);
-					//verifica = verificaFronteira(novaFronteiraParaBaixo, frontFinal);
+					mostraMovimento(novaFronteiraParaBaixo);
+					verifica = verificaFronteira(novaFronteiraParaBaixo, frontFinal);
+					
+					nosDescobertos.add(novaFronteiraParaBaixo);
 					
 					if(novaFronteiraParaBaixo.custo == 0) 
 						verifica = true;
@@ -226,19 +221,18 @@ public class BuscaA {
 				tbDireita[pI][pJ] = tbDireita[pI][pJ + 1]; 
 				tbDireita[pI][pJ + 1] = " ";
 				
-				//JOptionPane.showMessageDialog(null, novaFronteiraDireita.toString() +"\n"+ f.antecessor.toString());
-				
-				if(!novaFronteiraDireita.toString().equals(f.antecessor.toString()) && !novaFronteiraDireita.toString().equals(tbInicial.toString())) { 
+				if(!novaFronteiraDireita.toString().equals(f.antecessor.toString()) &&
+				   !novaFronteiraDireita.toString().equals(tbInicial.toString()) &&
+				   verificaDuplaExpansao(novaFronteiraDireita, nosDescobertos) == false) { 
 				
 					novaFronteiraDireita.antecessor = f;
 					novaFronteiraDireita.profundidade = novaFronteiraDireita.antecessor.profundidade + 1;
 					novaFronteiraDireita.custo = calculaCusto(f, frontFinal);
-					
-					//f.fronteiras.add(novaFronteiraDireita);
 					fronteiras.add(0,novaFronteiraDireita);
-					//mostraMovimento(novaFronteiraDireita);
-					//	JOptionPane.showMessageDialog(null, "prof nova: " + novaFronteiraDireita.profundidade + "prof antiga: " + f.profundidade);
-					//verifica = verificaFronteira(novaFronteiraDireita, frontFinal);
+					mostraMovimento(novaFronteiraDireita);
+					verifica = verificaFronteira(novaFronteiraDireita, frontFinal);
+					
+					nosDescobertos.add(novaFronteiraDireita);
 					
 					if(novaFronteiraDireita.custo == 0) 
 						verifica = true;
@@ -248,7 +242,6 @@ public class BuscaA {
 			}
 			
 	fronteiras.remove(f); //remove o nó expandido
-			//JOptionPane.showMessageDialog(null, "FIM da expansao");
 			
 	return verifica;
 		
@@ -281,17 +274,18 @@ public class BuscaA {
 				for(int k=0;k<3;k++) {  // percorre as posições do tabuleiro resultado
 					for(int l =0;l<3;l++) {
 					
-						if(atual.tabuleiro[i][j].equals(resultado.tabuleiro[k][l]) && !atual.tabuleiro[i][j].equals(" ") && !atual.tabuleiro[k][l].equals(" ")) { // verifica se achou a posição da peça (exeto para a posição sem número)
-							if(i!=k || j!=l) { // se estiver em uma posição diferente, significa que terá uma custo para se mover e chegar ao resultado
+						if(!atual.tabuleiro[i][j].equals(resultado.tabuleiro[k][l]) && (!atual.tabuleiro[i][j].equals(" ") && !atual.tabuleiro[k][l].equals(" "))) { // verifica se achou a posição da peça (exeto para a posição sem número)
+							if(i!=k && j!=l) { // se estiver em uma posição diferente, significa que terá uma custo para se mover e chegar ao resultado
 								
 								iAux = i-k; //calcula a diferença (entre as posições de linha) de casas entre as peças do tabuleiro
 								if(iAux<0) //Se menor que 0, multiplica por -1 para tornar a diferença positiva, para se somar ao custo
 									iAux = iAux*-1;
+								
 								jAux = j-l; //calcula a diferença (entre as posições de coluna) de casas entre as peças do tabuleiro
 								if(jAux<0)//Se menor que 0, multiplica por -1 para tornar a diferença positiva, para se somar ao custo
 									jAux = jAux*-1;
 								
-								custo += iAux + jAux; //soma o custo dos movimentos
+								custo = iAux + jAux; //soma o custo dos movimentos
 								
 							}
 						}
@@ -303,5 +297,34 @@ public class BuscaA {
 		
 		return custo;
 	}
-
+	
+	public static void mostraMovimento(Fronteira fNew) {
+		
+		String tabuleiroNew = "-------------\n";
+		
+		for(int i = 0; i<=2; i++) {
+			tabuleiroNew += "| ";
+			for(int j = 0; j<=2; j++) {
+				tabuleiroNew += fNew.tabuleiro[i][j] + " | ";
+			}
+			
+			tabuleiroNew += "\n-------------\n";
+		}
+		
+		System.out.print(tabuleiroNew);
+	}
+	
+	public static boolean verificaDuplaExpansao(Fronteira Fronteiraexpandida, ArrayList<Fronteira> expandidos) {
+		
+		boolean verifica = false;
+		
+			for(int j=0;j<expandidos.size();j++) {
+				if(Fronteiraexpandida.toString().equals(expandidos.get(j).toString())) {
+					verifica = true;
+				}
+		}
+		
+		return verifica;
+		
+	}
 }
